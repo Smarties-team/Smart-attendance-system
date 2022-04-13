@@ -5480,12 +5480,8 @@ function Navbar(props) {
   return (
     /*#__PURE__*/
     // Navigation bar
-    // <div className="d-flex flex-column flex-shrink-0 p-3 bg-light" style={{width: "280px"}}>
     (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "col-auto p-3 bg-light",
-      style: {
-        width: "280px"
-      },
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("a", {
         href: "/",
         className: "d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none",

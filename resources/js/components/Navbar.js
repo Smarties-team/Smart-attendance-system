@@ -39,8 +39,7 @@ function Navbar(props) {
     return (
 
         // Navigation bar
-        // <div className="d-flex flex-column flex-shrink-0 p-3 bg-light" style={{width: "280px"}}>
-        <div className="col-auto p-3 bg-light" style={{width: "280px"}}>
+        <div className="col-auto p-3 bg-light">
             <a href="/"
                className="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
                 <span className="fs-4 text-danger">Smart classroom</span>
