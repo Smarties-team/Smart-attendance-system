@@ -4,7 +4,7 @@ import {BrowserRouter, Routes, Route} from "react-router-dom";
 import Home from "./Home";
 import Students from "./Students";
 import Layout from "./Layout";
-import navb from "./navb";
+
 
 function Navigation(props) {
     return (
