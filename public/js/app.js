@@ -5715,26 +5715,9 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
- // {invoices.map((invoice) => (
-//     <Link
-//         style={{ display: "block", margin: "1rem 0" }}
-//         to={`/invoices/${invoice.number}`}
-//         key={invoice.number}
-//     >
-//         {invoice.name}
-//     </Link>
-// <button onClick={(event) => shoot("Goal!", event)}>Take the shot!</button>
+ // async makes it fail (React component cannot be async)
 
 
-
-
-function StudentRow(props) {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
-    children: [console.log("here"), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
-      children: "Present"
-    })]
-  });
-} // async makes it fail
 
 
 function StudentsTable() {
@@ -5746,7 +5729,8 @@ function StudentsTable() {
 
   function getStudents() {
     return _getStudents.apply(this, arguments);
-  }
+  } // Run getStudents only one time when the component renders the first time
+
 
   function _getStudents() {
     _getStudents = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
@@ -5761,7 +5745,7 @@ function StudentsTable() {
             case 2:
               response = _context2.sent;
               console.log('res: ', response);
-              setStudents(response.data); // students.forEach((x) => console.log("S:" + x));
+              setStudents(response.data);
 
             case 5:
             case "end":
@@ -5787,47 +5771,11 @@ function StudentsTable() {
         }
       }
     }, _callee);
-  })), []);
+  })), []); // Just for debugging (Print students object whenever its state changes)
+
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     console.log(students);
-  }, [students]); // students = await axios.get('students');
-  // .then((res) => {
-  //     console.log(res);
-  //     students = res.data;
-  //     students = JSON.parse(res);
-  //
-  //     console.log("response data: " + students);
-  //     console.log("response data: " + students[1]);
-  //
-  //     console.log("response data: " + students[1][1]);
-  //
-  //     console.log("response data: " + students[1][1].name);
-  //
-  // }
-  // )
-  // students = students.data;
-  // console.log(students);
-  // students.forEach((x) => console.log(x));
-  // console.log("Data: " + students.data);
-
-  var createRow = function createRow(student, index) {
-    var row = "<tr>";
-    row += '<th scope="row">';
-    row += index;
-    row += '</th>';
-    row += "<td>" + student.name + "</td>";
-    row += "<td>" + student.grade + "</td>";
-    row += "<td>" + "Present" + "</td>";
-    return row;
-  };
-
-  var createRows = function createRows() {
-    console.log("here");
-    var rows = students.map(createRow);
-    console.log(rows);
-    return rows;
-  }; // return("he");
-
+  }, [students]); // students.forEach((x) => console.log(x));
 
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("table", {
@@ -5848,46 +5796,21 @@ function StudentsTable() {
             children: "Status"
           })]
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tbody", {
-        children: [students.map(function (stud, index) {
-          console.log("from map " + index);
-          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(StudentRow, {
-            student: stud
-          });
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
-            scope: "row",
-            children: "1"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
-            children: "Mark"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
-            children: "Otto"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
-            children: "@mdo"
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
-            scope: "row",
-            children: "2"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
-            children: "Jacob"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
-            children: "Thornton"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
-            children: "@fat"
-          })]
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
-            scope: "row",
-            children: "3"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
-            children: "Larry"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
-            children: "the Bird"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
-            children: "@twitter"
-          })]
-        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("tbody", {
+        children: students.map(function (student, index) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("tr", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("th", {
+              scope: "row",
+              children: student.id
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+              children: student.name
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+              children: student.grade
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("td", {
+              children: "Present"
+            })]
+          }, student.id);
+        })
       })]
     })
   });
