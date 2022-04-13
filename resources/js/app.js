@@ -4,9 +4,13 @@
  * building robust, powerful web applications using React + Laravel.
  */
 
-import Example from "./components/Example";
 
 require('./bootstrap');
+
+// React components
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Navigation from "./components/Navigation";
 
 /**
  * Next, we will create a fresh React component instance and attach it to
@@ -15,13 +19,6 @@ require('./bootstrap');
  */
 
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Navigation from "./components/Navigation";
-
-// require('./components/navb');
-// require('./components/Example');
-// require('./components/formUI');
 
 
 function App() {

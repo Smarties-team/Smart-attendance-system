@@ -11,14 +11,6 @@ function Navigation(props) {
         //the recommended interface for running React Router in a web browser. <BrowserRouter> stores the current
         // location in the browser's address bar using clean URLs and navigates using the browser's built-in history stack.
         <BrowserRouter>
-            {/*<Routes>*/}
-
-            {/*    <Route path='/' element={<Home />} />*/}
-            {/*    <Route path='/home' element={<Home />} />*/}
-            {/*    <Route path='/students' element={<Students />} />*/}
-            {/*    /!*<Route path="*" element={<NoPage />}*!/*/}
-
-            {/*</Routes>*/}
 
             {/*Stateful, top-level component that makes all the other components and hooks work.*/}
             <Routes>
@@ -33,6 +25,16 @@ function Navigation(props) {
                     {/*<Route path="*" element={<NoPage />}*/}
                 </Route>
             </Routes>
+
+            {/*You can make other routes outside the above layout here*/}
+            {/*<Routes>*/}
+
+            {/*    <Route path='/' element={<Home />} />*/}
+            {/*    <Route path='/home' element={<Home />} />*/}
+            {/*    <Route path='/students' element={<Students />} />*/}
+            {/*    /!*<Route path="*" element={<NoPage />}*!/*/}
+
+            {/*</Routes>*/}
 
         </BrowserRouter>
     );

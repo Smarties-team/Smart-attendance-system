@@ -5277,19 +5277,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _components_Example__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/Example */ "./resources/js/components/Example.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var _components_Navigation__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/Navigation */ "./resources/js/components/Navigation.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var _components_Navigation__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Navigation */ "./resources/js/components/Navigation.js");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes React and other helpers. It's a great starting point while
  * building robust, powerful web applications using React + Laravel.
  */
+__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js"); // React components
 
 
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+
+
+
 /**
  * Next, we will create a fresh React component instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -5298,23 +5300,16 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
 
-
- // require('./components/navb');
-// require('./components/Example');
-// require('./components/formUI');
-
-
-
 function App() {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_components_Navigation__WEBPACK_IMPORTED_MODULE_3__["default"], {})
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_components_Navigation__WEBPACK_IMPORTED_MODULE_2__["default"], {})
   });
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (App);
 
 if (document.getElementById('root')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_2__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(App, {}), document.getElementById('root'));
+  react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(App, {}), document.getElementById('root'));
 }
 
 /***/ }),
@@ -5352,104 +5347,6 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
-
-/***/ }),
-
-/***/ "./resources/js/components/Example.js":
-/*!********************************************!*\
-  !*** ./resources/js/components/Example.js ***!
-  \********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
-
-
-
-
-
-function Example(props) {
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-    className: "container",
-    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-      className: "row justify-content-\\ center",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-        className: "col-md-8",
-        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-          className: "card",
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
-            className: "card-header",
-            children: "Example Component"
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
-            className: "card-body",
-            children: ["I'm EXXXXAS! and ", props.name]
-          })]
-        })
-      })
-    })
-  });
-}
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Example);
-
-if (document.getElementById('example')) {
-  react_dom__WEBPACK_IMPORTED_MODULE_1__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Example, {}), document.getElementById('example'));
-} // <div className="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
-//     <a href="/" className="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-//         <span className="fs-4 text-danger">Smart classroom</span>
-//     </a>
-//     <hr/>
-//         <ul className="nav nav-pills flex-column mb-auto">
-//             <li className="nav-item">
-//                 <a href="#" className="nav-link active" aria-current="page">
-//                     Home
-//                 </a>
-//             </li>
-//             <li>
-//                 <a href="#" className="nav-link link-dark">
-//                     Students
-//                 </a>
-//             </li>
-//             <li className="visually-hidden">
-//                 <a href="#" className="nav-link link-dark">
-//                     Orders
-//                 </a>
-//             </li>
-//             <li className="visually-hidden">
-//                 <a href="#" className="nav-link link-dark">
-//                     Products
-//                 </a>
-//             </li>
-//             <li className="visually-hidden">
-//                 <a href="#" className="nav-link link-dark">
-//                     Customers
-//                 </a>
-//             </li>
-//         </ul>
-//         <hr/>
-//             <div className="dropdown visually-hidden">
-//                 <a href="#" className="d-flex align-items-center link-dark text-decoration-none dropdown-toggle"
-//                    id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-//                     <img src="https://github.com/mdo.png" alt="" width="32" height="32" className="rounded-circle me-2"/>
-//                         <strong>mdo</strong>
-//                 </a>
-//                 <ul className="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-//                     <li><a className="dropdown-item" href="#">New project...</a></li>
-//                     <li><a className="dropdown-item" href="#">Settings</a></li>
-//                     <li><a className="dropdown-item" href="#">Profile</a></li>
-//                     <li>
-//                         <hr className="dropdown-divider"></hr>
-//                     </li>
-//                     <li><a className="dropdown-item" href="#">Sign out</a></li>
-//                 </ul>
-//             </div>
-// </div>
 
 /***/ }),
 

@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\StudentsController;
 
 Route::get('/hello', function () {
@@ -26,6 +25,6 @@ Route::post('/addstudent', [StudentsController::class, 'store']);
 Route::get('/students', [StudentsController::class, 'index']);
 
 Route::view('/{any}', 'index')->where('any', '.*');
-//Route::get('/', [HomeController::class, 'index']);
+
 
 //Route::get('/students', [StudentsController::class, 'show']);
