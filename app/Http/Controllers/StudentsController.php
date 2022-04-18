@@ -70,6 +70,19 @@ class StudentsController extends Controller
             $student->save();
 
             // Run face recogintion
+            $command = 'conda activate env36 && python ./recognizeStudent.py ' . $student->id;
+
+//            $command = 'dir' ;//
+            $out->writeln("id: " . $student->id);
+
+
+            $escaped_command = escapeshellcmd($command);
+            $escaped_command .= ' 2>&1';
+            $out->writeln("command: " . $command);
+            $out->writeln("escaped: " . $escaped_command);
+
+            $output = shell_exec($escaped_command);
+            echo $output;
 
             return "Add student success";
         } catch (\Exception $e) {
