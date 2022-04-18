@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use http\Env\Response;
 use Illuminate\Http\Request;
+use mysql_xdevapi\Exception;
 use PhpParser\Node\Expr\Array_;
 
 class StudentsController extends Controller
@@ -18,7 +19,8 @@ class StudentsController extends Controller
     {
         //
 
-        return Student::all();
+//        return Student::all();
+        return Student::select('name', 'grade')->get();
     }
 
     /**
@@ -57,7 +59,10 @@ class StudentsController extends Controller
                 $photo_path = $f->storeAs('', $name . '.' . $f->extension());
                 $out->writeln("path: " . $photo_path);
 
-                echo "Student photo upload success\r\n";
+//                echo "Student photo upload success\r\n";
+            }
+            else {
+                throw new \Exception("No photo uploaded");
             }
 
             $student = new Student;
@@ -69,38 +74,36 @@ class StudentsController extends Controller
             $student->email = '';
             $student->save();
 
-            // Run face recogintion
-            $command = 'conda activate env36 && python ./recognizeStudent.py ' . $student->id;
-
-//            $command = 'dir' ;//
             $out->writeln("id: " . $student->id);
 
-
+            // Run face recogintion
+            $command = 'conda activate env36 && python ./recognizeStudent.py ' . $student->id;
             $escaped_command = escapeshellcmd($command);
             $escaped_command .= ' 2>&1';
-            $out->writeln("command: " . $command);
-            $out->writeln("escaped: " . $escaped_command);
-
             $output = shell_exec($escaped_command);
-            echo $output;
 
-            return "Add student success";
+            $out->writeln("Python Output: " . $output . " len: " . strlen($output));
+
+            if (trim($output) == 'Success') {
+
+                return "Add student success";
+            }
+            else {
+                throw new \Exception("Face recognition failed, " . $output);
+            }
+
+
         } catch (\Exception $e) {
 
             $out->writeln('error:'  . " with message: " . $e->getMessage());
-            return "Failed to add student due to " . $e->getMessage();
+            if(isset($student)) $student->delete();
+            return "Failed to add student, " . $e->getMessage();
         }
 
-
-
-
-
-//        $out->writeln("input key all file: " . json_encode($request->allFiles()));
-//        $out->writeln("input key file: " . json_encode(count($request->file())));
-
 //    $request->dump(); // dump raw payload !!!!!!!!!!
-        return "Failed to add student";
 
+        // This should never be reached
+        return "Failed to add student";
     }
 
     /**
