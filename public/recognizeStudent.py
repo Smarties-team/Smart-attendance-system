@@ -56,16 +56,16 @@ try:
     # Get photo path from database
     cursor.execute("SELECT photo FROM students WHERE id=" + studentID)
     result = cursor.fetchall()
-    print("Fetched: ", result)
+    # print("Fetched: ", result)
     path = str(result[0][0])
     fullPath = "../storage/app/" + path
-    print("full path", fullPath)
+    # print("full path", fullPath)
 
     # Open image
     image = face_recognition.load_image_file(fullPath)
 
     # Vaildate a human face
-    face_locations = face_recognition.face_locations(image, model="cnn")
+    face_locations = face_recognition.face_locations(image, model="hog")
     if len(face_locations) < 1:
         # print("Invalid photo, no face detected")
         raise Exception("Invalid photo, no face detected")
@@ -107,7 +107,7 @@ try:
         raise Exception("Rows affected should be 1, but got: ", result)
 
 except Exception as e:
-    print("Failure, ", e)
+    print(e)
 
 finally:
     cursor.close()
