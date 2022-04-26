@@ -27,6 +27,20 @@ function StudentsTable() {
 
     // students.forEach((x) => console.log(x));
 
+    const isPresent = (student) =>
+    {
+        if (student.left_at == null) {
+            return (
+                <span style={{color: "green"}}>Present</span>
+            );
+        }
+        else {
+            return (
+                <span style={{color: "red"}}>Absent</span>
+            );
+        }
+
+    }
 
     return (
         <div>
@@ -47,10 +61,10 @@ function StudentsTable() {
                     students.map((student, index) =>
 
                         <tr key={student.id}>
-                            <th scope="row">{student.id}</th>
+                            <th scope="row">{index+1}</th>
                             <td>{student.name}</td>
                             <td>{student.grade}</td>
-                            <td>Present</td>
+                            <td>{isPresent(student)}</td>
                         </tr>
                 )
                 }
