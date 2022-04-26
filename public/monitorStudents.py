@@ -1,4 +1,5 @@
 import imp
+from turtle import st
 import face_recognition
 import cv2
 import time
@@ -6,6 +7,7 @@ from imutils import paths
 import os
 import sys
 import pickle
+from datetime import datetime
 
 # from matplotlib.pyplot import draw
 from PIL import Image, ImageDraw
@@ -129,51 +131,72 @@ def fetchKnownStudents():
         cursor.close()
         connection.close()
 
+# Log present students in the DB
+
 
 def logStudents(all_students, present_students):
-    # Store in DB
 
-    # Access database
-    try:
-        connection = msql.connect(**connection_config_dict)
+    # Connect to database
+    connection = msql.connect(**connection_config_dict)
 
-        if connection.is_connected() != True:
-            print("Failed to connect to database")
-            exit()
-
-    except Exception as e:
-        print("Failed to connect due to ", e)
-        exit()
+    if connection.is_connected() != True:
+        raise Exception("Failed to connect to database")
 
     try:
         cursor = connection.cursor()
 
-        # Read from the log table, the last record for each student id
-        # sqlStmt = "UPDATE students SET face_encoding = %s WHERE id= %s"
-        # vals = (serializedEncodings, studentID)
+        for idx in range(len(all_students)):
 
-        # Perform and validate the SQL update command
-        try:
+            id = all_students[idx][0]
+
+            # Read from the log table, the last record for each student id
+            # sqlStmt = "SELECT student_id, entered_at, left_at FROM students_logs where student_id= %s"
+            sqlStmt = """SELECT sl.student_id, sl.entered_at, sl.left_at 
+                        FROM students_logs sl 
+                        JOIN (select student_id, max(entered_at) as entered_at from students_logs group by student_id) as m
+                        on sl.student_id = m.student_id and sl.entered_at = m.entered_at where sl.student_id = %s"""
+
+            vals = (id,)
             cursor.execute(sqlStmt, vals)
-        except Exception as e:
-            if str(e) == "1300: Invalid utf8mb4 character string: '800363'":
-                # Ignore this error
-                []
+
+            students = cursor.fetchall()
+            rows_count = len(students)
+            print("at idx= ", idx, "val= ", all_students[idx][1])
+            print("rowscounts: ", rows_count, "students: ", students)
+
+            # No records found
+            if(rows_count == 0):
+                (entered_at, left_at) = (None, None)
             else:
-                raise Exception(
-                    "Failed to execute the attendance insertion due to ", e)
+                (id, entered_at, left_at) = students[0]
 
-        connection.commit()
+            # If present
+            if idx in present_students:
+                if(rows_count == 0 or left_at != None):
+                    # Create new record with current time as entering time
+                    sqlStmt = "INSERT into students_logs (student_id, entered_at) VALUES (%s, %s)"
+                    vals = (id, datetime.now())
+                    cursor.execute(sqlStmt, vals)
 
-        # Validate the affected rows count
-        result = cursor.rowcount
-        if result == 1:
-            print("Success")
-        else:
-            raise Exception("Rows affected should be 1, but got: ", result)
+                    # Validate insertion
 
-    except Exception as e:
-        print(e)
+            # Absent
+            else:
+                # Was present ?
+                if(rows_count != 0 and left_at == None):
+                    # Update the left at to current time
+                    sqlStmt = "UPDATE students_logs SET left_at = %s WHERE student_id = %s AND entered_at = %s"
+                    vals = (datetime.now(), id, entered_at)
+                    cursor.execute(sqlStmt, vals)
+
+                    # Validate update
+
+        # # Validate the affected rows count
+        # result = cursor.rowcount
+        # if result == 1:
+        #     print("Success")
+        # else:
+        #     raise Exception("Rows affected should be 1, but got: ", result)
 
     finally:
         cursor.close()
