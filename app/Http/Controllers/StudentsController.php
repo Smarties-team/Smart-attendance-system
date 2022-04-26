@@ -7,6 +7,7 @@ use http\Env\Response;
 use Illuminate\Http\Request;
 use mysql_xdevapi\Exception;
 use PhpParser\Node\Expr\Array_;
+use Illuminate\Support\Facades\DB;
 
 class StudentsController extends Controller
 {
@@ -20,7 +21,16 @@ class StudentsController extends Controller
         //
 
 //        return Student::all();
-        return Student::select('name', 'grade')->get();
+        $students = DB::table('students')
+            ->join('students_logs', 'students.id', '=', 'students_logs.student_id')
+            ->select('id', 'name', 'address', 'grade', 'national_id', 'email', 'entered_at', 'left_at')
+            ->whereIn('entered_at', function ($query){
+                $query->selectRaw('max(entered_at)')->from('students_logs')->groupBy('student_id');
+            })
+            ->get();
+
+
+        return $students;
     }
 
     /**
@@ -36,32 +46,28 @@ class StudentsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
+        // Console
         $out = new \Symfony\Component\Console\Output\ConsoleOutput();
-
-        //
 
         $out->writeln("input key name: " . $request->input('name'));
         $out->writeln("all keys: " . json_encode($request->keys()));
 
         $photo_path = "";
 
-
-
         try {
+
             $name = $request->name;
-            if($request->hasFile('myfile')) {
+
+            if ($request->hasFile('myfile')) {
                 $f = $request->file('myfile');
                 $photo_path = $f->storeAs('', $name . '.' . $f->extension());
                 $out->writeln("path: " . $photo_path);
-
-//                echo "Student photo upload success\r\n";
-            }
-            else {
+            } else {
                 throw new \Exception("No photo uploaded");
             }
 
@@ -79,24 +85,25 @@ class StudentsController extends Controller
             // Run face recogintion
             $command = 'conda activate env36 && python ./recognizeStudent.py ' . $student->id;
             $escaped_command = escapeshellcmd($command);
+
+            // Redirects stderr to stdout.
             $escaped_command .= ' 2>&1';
             $output = shell_exec($escaped_command);
 
-            $out->writeln("Python Output: " . $output . " len: " . strlen($output));
+            $out->writeln("Python Output: " . $output);
 
             if (trim($output) == 'Success') {
 
                 return "Add student success";
-            }
-            else {
+            } else {
                 throw new \Exception("Face recognition failed, " . $output);
             }
 
 
         } catch (\Exception $e) {
 
-            $out->writeln('error:'  . " with message: " . $e->getMessage());
-            if(isset($student)) $student->delete();
+            $out->writeln('error:' . " with message: " . $e->getMessage());
+            if (isset($student)) $student->delete();
             return "Failed to add student, " . $e->getMessage();
         }
 
@@ -109,7 +116,7 @@ class StudentsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Student  $student
+     * @param \App\Models\Student $student
      * @return \Illuminate\Http\Response
      */
     public function show(Student $student)
@@ -121,7 +128,7 @@ class StudentsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Students  $students
+     * @param \App\Models\Students $students
      * @return \Illuminate\Http\Response
      */
     public function edit(Students $students)
@@ -132,8 +139,8 @@ class StudentsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Students  $students
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Students $students
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Students $students)
@@ -144,7 +151,7 @@ class StudentsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Students  $students
+     * @param \App\Models\Students $students
      * @return \Illuminate\Http\Response
      */
     public function destroy(Students $students)
