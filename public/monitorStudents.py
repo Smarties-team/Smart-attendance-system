@@ -4,8 +4,10 @@ import face_recognition
 import cv2
 import time
 from imutils import paths
+import imutils
 import os
 import sys
+import traceback
 import pickle
 from datetime import datetime
 
@@ -15,13 +17,33 @@ import numpy as np
 
 import mysql.connector as msql
 
+import requests
 
 # Take the argument from the command line?
 
+webcams = ["http://192.168.1.2:8080/photo.jpg"]
+
 # Return an image capture from the camera stream
-def capture():
-    imgPath = "../storage/app/bill-steve-elon.jpg"
-    image = face_recognition.load_image_file(imgPath)
+
+
+def capture(camera_id):
+
+    image = None
+
+    try:
+
+        # capture from URL stream
+        img_resp = requests.get(webcams[camera_id])
+        img_arr = np.array(bytearray(img_resp.content), dtype=np.uint8)
+        image = cv2.imdecode(img_arr, -1)
+        image = imutils.resize(image, width=1000, height=1800)
+
+    # Use default image stored in the disk
+    except Exception as e:
+        print("Failed to capture image from web camera, the default image is used instead")
+        imgPath = "../storage/app/bill-steve-elon.jpg"
+        image = face_recognition.load_image_file(imgPath)
+
     return image
 
 
@@ -34,7 +56,7 @@ def faceRecognition(image, students_faces):
 
     # Vaildate existance
     if len(face_locations) < 1:
-        print("No face detected")
+        print("No faces detected")
         return []
 
     face_encodings = face_recognition.face_encodings(
@@ -91,16 +113,10 @@ def fetchKnownStudents():
     students_faces = []
 
     # Connect to database
-    try:
-        connection = msql.connect(**connection_config_dict)
+    connection = msql.connect(**connection_config_dict)
 
-        if connection.is_connected() != True:
-            print("Failed to connect to database")
-            return []
-
-    except Exception as e:
-        print("Failed to connect due to ", e)
-        return []
+    if connection.is_connected() != True:
+        raise Exception("Failed to connect to database")
 
     # Fetch data
     try:
@@ -149,8 +165,7 @@ def logStudents(all_students, present_students):
 
             id = all_students[idx][0]
 
-            # Read from the log table, the last record for each student id
-            # sqlStmt = "SELECT student_id, entered_at, left_at FROM students_logs where student_id= %s"
+            # Read from the log table, the lastest enterance record for this student id
             sqlStmt = """SELECT sl.student_id, sl.entered_at, sl.left_at 
                         FROM students_logs sl 
                         JOIN (select student_id, max(entered_at) as entered_at from students_logs group by student_id) as m
@@ -161,8 +176,6 @@ def logStudents(all_students, present_students):
 
             students = cursor.fetchall()
             rows_count = len(students)
-            print("at idx= ", idx, "val= ", all_students[idx][1])
-            print("rowscounts: ", rows_count, "students: ", students)
 
             # No records found
             if(rows_count == 0):
@@ -217,7 +230,7 @@ def main():
             else:
                 raise Exception("No students found in the database")
 
-            imgCapture = capture()
+            imgCapture = capture(0)
             present_students = faceRecognition(imgCapture, students_faces)
 
             print("Present students: ")
@@ -233,6 +246,7 @@ def main():
 
     except Exception as e:
         print("Exception occurred, ", e)
+        traceback.print_exc()
         exit()
 
 
