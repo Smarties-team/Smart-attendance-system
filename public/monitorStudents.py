@@ -186,30 +186,33 @@ def logStudents(all_students, present_students):
             # If present
             if idx in present_students:
                 if(rows_count == 0 or left_at != None):
+
                     # Create new record with current time as entering time
                     sqlStmt = "INSERT into students_logs (student_id, entered_at) VALUES (%s, %s)"
                     vals = (id, datetime.now())
                     cursor.execute(sqlStmt, vals)
 
                     # Validate insertion
+                    rows_affected = cursor.rowcount
+                    if rows_affected != 1:
+                        raise Exception(
+                            "Rows affected should be 1, but got: ", rows_affected)
 
             # Absent
             else:
                 # Was present ?
                 if(rows_count != 0 and left_at == None):
-                    # Update the left at to current time
+
+                    # Update the left_at time to current time
                     sqlStmt = "UPDATE students_logs SET left_at = %s WHERE student_id = %s AND entered_at = %s"
                     vals = (datetime.now(), id, entered_at)
                     cursor.execute(sqlStmt, vals)
 
                     # Validate update
-
-        # # Validate the affected rows count
-        # result = cursor.rowcount
-        # if result == 1:
-        #     print("Success")
-        # else:
-        #     raise Exception("Rows affected should be 1, but got: ", result)
+                    rows_affected = cursor.rowcount
+                    if rows_affected != 1:
+                        raise Exception(
+                            "Rows affected should be 1, but got: ", rows_affected)
 
     finally:
         cursor.close()
@@ -226,7 +229,7 @@ def main():
             students_faces = fetchKnownStudents()
 
             if len(students_faces) > 0:
-                print(len(students_faces), " Students retrieved")
+                print(len(students_faces), " Students retrieved from the database")
             else:
                 raise Exception("No students found in the database")
 
@@ -240,8 +243,9 @@ def main():
             # log attendance in the Database
             logStudents(students_faces, present_students)
 
-            print("OK")
-            # Repeat every 5 mins
+            print("Students logged successfully")
+
+            # Repeat every 10 seconds
             time.sleep(10)
 
     except Exception as e:
