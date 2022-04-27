@@ -18,16 +18,31 @@ class StudentsController extends Controller
      */
     public function index()
     {
-        //
+        // Console
+        $out = new \Symfony\Component\Console\Output\ConsoleOutput();
 
 //        return Student::all();
-        $students = DB::table('students')
-            ->join('students_logs', 'students.id', '=', 'students_logs.student_id')
+        $q = DB::table('students')
+            ->leftJoin('students_logs', 'students.id', '=', 'students_logs.student_id')
             ->select('id', 'name', 'address', 'grade', 'national_id', 'email', 'entered_at', 'left_at')
             ->whereIn('entered_at', function ($query){
                 $query->selectRaw('max(entered_at)')->from('students_logs')->groupBy('student_id');
-            })
-            ->get();
+            })->orWhereNotExists(function ($query){
+                $query->select('id')->from('students')->whereRaw('id = students_logs.student_id');
+            });
+
+        $out->writeln($q->toSql());
+
+        $students = $q->get();
+//        $students = DB::table('students')
+//            ->join('students_logs', 'students.id', '=', 'students_logs.student_id')
+//            ->select('id', 'name', 'address', 'grade', 'national_id', 'email', 'entered_at', 'left_at')
+//            ->whereIn('entered_at', function ($query){
+//                $query->selectRaw('max(entered_at)')->from('students_logs')->groupBy('student_id');
+//            })->orWhereNotExists(function ($query){
+//                $query->select('id')->from('students')->where('id', '=', 'students_logs.student_id');
+//            })
+//            ->get();
 
 
         return $students;
