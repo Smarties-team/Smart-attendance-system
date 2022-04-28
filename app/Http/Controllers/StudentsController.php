@@ -24,7 +24,7 @@ class StudentsController extends Controller
 //        return Student::all();
         $q = DB::table('students')
             ->leftJoin('students_logs', 'students.id', '=', 'students_logs.student_id')
-            ->select('id', 'name', 'address', 'grade', 'national_id', 'email', 'entered_at', 'left_at')
+            ->select('id', 'name', 'address', 'grade', 'national_id', 'email', 'photo', 'entered_at', 'left_at')
             ->whereIn('entered_at', function ($query){
                 $query->selectRaw('max(entered_at)')->from('students_logs')->groupBy('student_id');
             })->orWhereNotExists(function ($query){
@@ -76,16 +76,20 @@ class StudentsController extends Controller
 
         try {
 
-            $name = $request->name;
+            $name = $request->name; // Student name entered in the form
 
+            // Check the uploaded file (Photo) validity and store it in the disk
             if ($request->hasFile('myfile')) {
                 $f = $request->file('myfile');
-                $photo_path = $f->storeAs('', $name . '.' . $f->extension());
+
+                // Store in public drive
+                $photo_path = $f->storeAs('students_photos', $name . '.' . $f->extension(), 'public');
                 $out->writeln("path: " . $photo_path);
             } else {
                 throw new \Exception("No photo uploaded");
             }
 
+            // Create a new student record and store in the database
             $student = new Student;
             $student->name = $request->input('name');
             $student->address = $request->address;
@@ -97,7 +101,7 @@ class StudentsController extends Controller
 
             $out->writeln("id: " . $student->id);
 
-            // Run face recogintion
+            // Run face recognition
             $command = 'conda activate env36 && python ./recognizeStudent.py ' . $student->id;
             $escaped_command = escapeshellcmd($command);
 
@@ -108,14 +112,16 @@ class StudentsController extends Controller
             $out->writeln("Python Output: " . $output);
 
             if (trim($output) == 'Success') {
-
                 return "Add student success";
-            } else {
+            }
+            else {
                 throw new \Exception("Face recognition failed, " . $output);
             }
 
 
-        } catch (\Exception $e) {
+        }
+        // Print error message and discard given data
+        catch (\Exception $e) {
 
             $out->writeln('error:' . " with message: " . $e->getMessage());
             if (isset($student)) $student->delete();

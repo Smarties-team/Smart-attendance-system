@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import ReactDOM from 'react-dom';
 
+import './StudentsTable.css';
 
 
 // async makes it fail (React component cannot be async)
@@ -52,6 +53,7 @@ function StudentsTable() {
                     <th scope="col">Name</th>
                     <th scope="col">Grade</th>
                     <th scope="col">Status</th>
+                    <th scope="col">Photo</th>
                 </tr>
                 </thead>
 
@@ -61,10 +63,14 @@ function StudentsTable() {
                     students.map((student, index) =>
 
                         <tr key={student.id}>
-                            <th scope="row">{index+1}</th>
-                            <td>{student.name}</td>
-                            <td>{student.grade}</td>
-                            <td>{isPresent(student)}</td>
+                            <th className={"align-middle"} scope="row">{index+1}</th>
+                            <td className={"align-middle"}>{student.name}</td>
+                            <td className={"align-middle"}>{student.grade}</td>
+                            <td className={"align-middle"}>{isPresent(student)}</td>
+
+                            <td className={"align-middle"}>
+                                <img src={"storage/" + student.photo} height={"50px"} width={"50px"}/>
+                            </td>
                         </tr>
                 )
                 }

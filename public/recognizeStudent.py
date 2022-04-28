@@ -58,7 +58,7 @@ try:
     result = cursor.fetchall()
     # print("Fetched: ", result)
     path = str(result[0][0])
-    fullPath = "../storage/app/" + path
+    fullPath = "../storage/app/public/" + path
     # print("full path", fullPath)
 
     # Open image
@@ -94,12 +94,13 @@ try:
             # Ignore this error
             []
         else:
-            raise Exception("Failed to execute the face encodings insertion due to ", e)
+            raise Exception(
+                "Failed to execute the face encodings insertion due to ", e)
             # exit()
 
     connection.commit()
 
-    # Validate the affected rows count
+    # Validate that one record is added
     result = cursor.rowcount
     if result == 1:
         print("Success")
@@ -112,4 +113,3 @@ except Exception as e:
 finally:
     cursor.close()
     connection.close()
-

@@ -147,9 +147,8 @@ def fetchKnownStudents():
         cursor.close()
         connection.close()
 
+
 # Log present students in the DB
-
-
 def logStudents(all_students, present_students):
 
     # Connect to database
@@ -185,6 +184,7 @@ def logStudents(all_students, present_students):
 
             # If present
             if idx in present_students:
+                # Was absent ?
                 if(rows_count == 0 or left_at != None):
 
                     # Create new record with current time as entering time
