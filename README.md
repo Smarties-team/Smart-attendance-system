@@ -10,7 +10,7 @@
 Log people's attendance via web camera.
 
 - Use captures taken from a web camera to detect and recognize present people by comparing their faces to a known database.
-- A web user interface is implemented using Laravel to show attendance info and add new people to the database.
+- A web user interface is implemented using Laravel to show attendance info and add interract with the database.
 
 ## Installation
 
@@ -33,10 +33,11 @@ Log people's attendance via web camera.
   You should be able to run python code in this configuration
 
 ### Laravel
-- This is straight forward, clone the repo
-- cd into the project folder
+- This is straight forward, clone the repo `git clone https://github.com/Smarties-team/Smart-attendance-system.git attendance`
+- cd into the project folder `cd attendance`
 - Install Composer Dependencies `$ composer install`
 - Install NPM Dependencies `$ npm install`
+- Build assets `$ npm run dev`
 - Create a copy of your .env file `$ cp .env.example .env`
 - Generate an app encryption key `$ php artisan key:generate`
 - Create an empty database
