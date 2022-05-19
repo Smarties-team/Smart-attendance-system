@@ -101,16 +101,29 @@ class StudentsController extends Controller
 
             $out->writeln("id: " . $student->id);
 
-            // Run face recognition
-            $command = 'conda activate env36 && python ./recognizeStudent.py ' . $student->id;
-            $escaped_command = escapeshellcmd($command);
 
-            // Redirects stderr to stdout.
-            $escaped_command .= ' 2>&1';
+            // -------- Run face recognition depending on the environment -------- //
+            $command = '';
+
+            $current_environment = env('APP_ENV');
+
+            if($current_environment == 'local')
+            {
+                // My local environment depends on conda python environment called env36
+                $command = 'conda activate env36 && python ./recognizeStudent.py ' . $student->id;
+            }
+            else
+            {
+                $command = 'python3 ./recognizeStudent.py ' . $student->id;
+            }
+
+            $escaped_command = escapeshellcmd($command);    // Handle special characters for security
+            $escaped_command .= ' 2>&1';    // Redirect stderr to stdout
             $output = shell_exec($escaped_command);
 
             $out->writeln("Python Output: " . $output);
 
+            // Check face recognition success
             if (trim($output) == 'Success') {
                 return "Add student success";
             }
@@ -118,6 +131,7 @@ class StudentsController extends Controller
                 throw new \Exception("Face recognition failed, " . $output);
             }
 
+            // ------------------------------------------------------------------------ //
 
         }
         // Print error message and discard given data
