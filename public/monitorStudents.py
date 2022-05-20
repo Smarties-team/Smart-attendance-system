@@ -1,4 +1,4 @@
-import imp
+import importlib
 from turtle import st
 import face_recognition
 import cv2
@@ -165,8 +165,8 @@ def logStudents(all_students, present_students):
             id = all_students[idx][0]
 
             # Read from the log table, the lastest enterance record for this student id
-            sqlStmt = """SELECT sl.student_id, sl.entered_at, sl.left_at 
-                        FROM students_logs sl 
+            sqlStmt = """SELECT sl.student_id, sl.entered_at, sl.left_at
+                        FROM students_logs sl
                         JOIN (select student_id, max(entered_at) as entered_at from students_logs group by student_id) as m
                         on sl.student_id = m.student_id and sl.entered_at = m.entered_at where sl.student_id = %s"""
 

@@ -1,4 +1,4 @@
-import imp
+import importlib
 import face_recognition
 import cv2
 import time
@@ -54,9 +54,10 @@ try:
     cursor = connection.cursor()
 
     # Get photo path from database
-    cursor.execute("SELECT photo FROM students WHERE id=" + studentID)
+    cursor.execute("SELECT photo FROM students WHERE id=" + str(studentID))
     result = cursor.fetchall()
     # print("Fetched: ", result)
+
     path = str(result[0][0])
     fullPath = "../storage/app/public/" + path
     # print("full path", fullPath)
@@ -90,7 +91,8 @@ try:
     try:
         cursor.execute(sqlStmt, vals)
     except Exception as e:
-        if str(e) == "1300: Invalid utf8mb4 character string: '800363'":
+        error_msg = str(e)
+        if (error_msg.find("1300: Invalid utf8mb4 character string") != -1):
             # Ignore this error
             []
         else:
