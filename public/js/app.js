@@ -5780,7 +5780,8 @@ function StudentsTable() {
   }, [students]); // students.forEach((x) => console.log(x));
 
   var isPresent = function isPresent(student) {
-    if (student.left_at == null) {
+    // If he entered and didn't leave then he is present
+    if (student.entered_at != null && student.left_at == null) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
         style: {
           color: "green"

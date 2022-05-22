@@ -30,7 +30,8 @@ function StudentsTable() {
 
     const isPresent = (student) =>
     {
-        if (student.left_at == null) {
+        // If he entered and didn't leave then he is present
+        if (student.entered_at != null && student.left_at == null) {
             return (
                 <span style={{color: "green"}}>Present</span>
             );
