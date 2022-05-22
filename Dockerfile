@@ -3,12 +3,12 @@
 FROM composer as build
 COPY composer.json composer.lock /app/
 RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction --no-scripts
-# --no-dev and --optimize-autoloader are well suited for a production build, 
+# --no-dev and --optimize-autoloader are well suited for a production build,
 # --no-scripts Skips execution of scripts defined in composer.json
 
 FROM php:7.4-apache as prod
 
-# Author field of the generated images. 
+# Author field of the generated images.
 MAINTAINER Diaa Eldeen  <dx.dx@dx.dx>
 
 # Python
@@ -52,8 +52,11 @@ RUN cd /var/www/html && \
     pip3 install -r requirements.txt
 
 
-# Install php mysqli, pdo, pdo_mysql extensions 
+# Install php mysqli, pdo, pdo_mysql extensions
 RUN docker-php-ext-install pdo pdo_mysql mysqli
+
+# Necessary for using nc tool that tests database connection at container startup
+RUN apt-get install -y netcat
 
 # Copy the project to apache document root
 COPY --from=build /app /var/www/html
@@ -63,7 +66,7 @@ COPY .env.example /var/www/html/.env
 # COPY .env.example /var/www/html/.env
 
 
-# Set the apache server user as the owner of the files and folders 
+# Set the apache server user as the owner of the files and folders
 RUN chown www-data /var/www/html -R
 
 # Configure apache directory and document root
