@@ -1,0 +1,4 @@
+face_recognition
+imutils
+mysql-connector-python
+requests
