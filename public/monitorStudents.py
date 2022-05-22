@@ -238,7 +238,9 @@ def main():
             if len(students_faces) > 0:
                 print(len(students_faces), " Students retrieved from the database")
             else:
-                raise Exception("No students found in the database")
+                print("No students found in the database")
+                time.sleep(10)
+                continue
 
             imgCapture = capture(0)
             present_students = faceRecognition(imgCapture, students_faces)
