@@ -25,7 +25,7 @@ except Exception as e:
     exit()
 
 
-# Connect to database
+# Database configuration
 connection_config_dict = {
     "user": "root",
     "password": "diaa",
@@ -37,6 +37,14 @@ connection_config_dict = {
     "autocommit": True,
     "pool_size": 5,  # connection pool size
 }
+
+# Use environment variables, otherwise use default values
+connection_config_dict["user"] = os.getenv("DB_USERNAME", "root")
+connection_config_dict["password"] = os.getenv("DB_PASSWORD", "diaa")
+connection_config_dict["host"] = os.getenv("DB_HOST", "127.0.0.1")
+connection_config_dict["port"] = os.getenv("DB_PORT", "3306")
+connection_config_dict["database"] = os.getenv("DB_DATABASE", "laravel")
+
 
 try:
     connection = msql.connect(**connection_config_dict)
@@ -59,13 +67,14 @@ try:
     # print("Fetched: ", result)
 
     path = str(result[0][0])
-    fullPath = "../storage/app/public/" + path
+    fullPath = "storage/" + path
+    # fullPath = "../storage/app/public/" + path
     # print("full path", fullPath)
 
     # Open image
     image = face_recognition.load_image_file(fullPath)
 
-    # Vaildate a human face
+    # Validate a human face
     face_locations = face_recognition.face_locations(image, model="hog")
     if len(face_locations) < 1:
         # print("Invalid photo, no face detected")
