@@ -41,7 +41,7 @@ def capture(camera_id):
     # Use default image stored in the disk
     except Exception as e:
         print("Failed to capture image from web camera, the default image is used instead")
-        imgPath = "../storage/app/bill-steve-elon.jpg"
+        imgPath = "test_img.jpg"
         image = face_recognition.load_image_file(imgPath)
 
     return image
