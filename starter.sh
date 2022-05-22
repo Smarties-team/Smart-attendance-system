@@ -5,6 +5,9 @@ echo "Starting the container"
 
 php artisan migrate
 
-apachectl -D FOREGROUND
+# Start apache server (as a background process)
+apachectl -D FOREGROUND &
 
-python3 public/monitorStudents.py
+# Run face recognition python script
+cd public
+python3 monitorStudents.py
