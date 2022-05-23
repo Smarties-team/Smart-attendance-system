@@ -80,7 +80,7 @@ RUN a2enmod rewrite
 
 
 # Change Laravel environment variables for Database
-ENV DB_HOST 192.168.1.5
+ENV DB_HOST mysql
 ENV DB_USERNAME diaa
 ENV DB_PASSWORD password
 ENV DB_DATABASE laravel
