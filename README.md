@@ -1,5 +1,6 @@
 - [Smart attendance system](#smart-attendance-system)
 - [Installation](#installation)
+- [Development environment](#development-environment)
   - [Python](#python)
   - [Laravel](#laravel)
   - [Web camera setup](#web-camera-setup)
@@ -14,21 +15,30 @@ Log people's attendance via web camera.
 
 ## Installation
 
+  - Clone the repo `git clone https://github.com/Smarties-team/Smart-attendance-system.git attendance`
+  - Run the docker container (Make sure docker is already installed in your pc): `docker compose up`
+  - Open `http://localhost` in your browser
+
+
+
+## Development environment
+
 ### Python
   - First install conda the latest version
-  - Create a virtual environment with python version 3.6 and name it `env36` strictly (newer versions make conflicts)
+  - Create a virtual environment with python version 3.8
     ``` 
-      conda create --name env36 python=3.6
-      conda activate env36
+      conda create --name env38 python=3.8
+      conda activate env38
     ```
   - Install the following packages
-    - face_recognition `conda install -c conda-forge face_recognition`
-    - opencv  `conda install -c conda-forge opencv`
+    - mysql-connector `conda install -c anaconda mysql-connector-python`
+    - ipykernel `conda install -c anaconda ipykernel`
     - dlib `conda install -c conda-forge dlib`
     - imutils `conda install -c conda-forge imutils`
-    - mysql-connector `conda install -c anaconda mysql-connector-python`
     - requests `conda install -c anaconda requests`
-    - ipykernel `conda install -c anaconda ipykernel`
+    - face_recognition `conda install -c conda-forge face_recognition`
+    - opencv  `conda install -c conda-forge opencv`
+    
     
   You should be able to run python code in this configuration
 
@@ -53,5 +63,5 @@ Log people's attendance via web camera.
 
 
 ## Start the application
-- Run python code, monitorStudents.py (In the created env36 environment)
+- Run python code, monitorStudents.py (In the created env38 environment)
 - Start the server `$ php artisan serve`
