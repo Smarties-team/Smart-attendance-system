@@ -16,15 +16,57 @@ from PIL import Image, ImageDraw
 import numpy as np
 
 import mysql.connector as msql
-
 import requests
+import queue
+import threading
 
 # Take the argument from the command line?
 
-webcams = ["http://192.168.1.2:8080/photo.jpg"]
+class VideoCapture:
+
+    def __init__(self, name):
+        self.cap = cv2.VideoCapture(name)
+        self.q = queue.Queue()
+        t = threading.Thread(target=self._reader)
+        t.daemon = True
+        t.start()
+
+
+    def _reader(self):
+        while self.cap.isOpened():
+            # Append new frame to the queue (Remove old one if exists)
+            # print('thread read')
+            ret, frame = self.cap.read()
+            if not ret:
+                continue
+            if not self.q.empty():
+                try:
+                    self.q.get_nowait() # discard previous unprocessed frame
+                except queue.Empty:
+                    pass
+
+            self.q.put(frame)
+
+    def read(self):
+        if self.q.empty():
+            return False, None
+        # if self.q.empty():
+        #     print('Empty')
+        #     return None
+        else:
+            # print("not")
+            return True, self.q.get()
+
+
+
+# webcams = ["http://192.168.1.30:8080/photo.jpg"]
+camera_device = 0
+mi8 = 'http://192.168.1.30:8080/video'
+# camera_device = mi8
 
 # Return an image capture from the camera stream
 
+cap = VideoCapture(mi8)
 
 def capture(camera_id):
 
@@ -33,10 +75,15 @@ def capture(camera_id):
     try:
 
         # capture from URL stream
-        img_resp = requests.get(webcams[camera_id])
-        img_arr = np.array(bytearray(img_resp.content), dtype=np.uint8)
-        image = cv2.imdecode(img_arr, -1)
-        image = imutils.resize(image, width=1000, height=1800)
+#         img_resp = requests.get(webcams[camera_id])
+#         img_arr = np.array(bytearray(img_resp.content), dtype=np.uint8)
+#         image = cv2.imdecode(img_arr, -1)
+#         image = imutils.resize(image, width=1000, height=1800)
+
+        success, image = cap.read()
+
+        if not success:
+            raise Exception("Failed to capture image")
 
     # Use default image stored in the disk
     except Exception as e:
@@ -255,7 +302,7 @@ def main():
             print("Students logged successfully")
 
             # Repeat every 10 seconds
-            time.sleep(10)
+            time.sleep(5)
 
     except Exception as e:
         print("Exception occurred, ", e)
